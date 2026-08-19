@@ -1,0 +1,59 @@
+
+
+import java.util.Scanner;
+
+public class finiteDifference {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        //This is where we get the number of data points
+        System.out.print("Enter number of data points: ");
+        int n = input.nextInt();
+
+        if (n < 2) {
+            System.out.println("Error: At least two data points are required.");
+            input.close();
+            return;
+        }
+
+        double[] x = new double[n];
+
+
+        System.out.println("Enter x values: ");
+
+        for (int i = 0; i < n; i++) {
+
+            x[i] = input.nextDouble();
+
+        }
+
+        //Time to computer the finite differences
+        double[][] diffTable = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            diffTable[i][0] = x[i];
+        }
+
+        for (int j = 1; j < n; j++) {
+            for (int i = 0; i < n; i++) {
+                if (i + 1 < n && j - 1 < n) {
+                    diffTable[i][j] = diffTable[i + 1][j - 1] - diffTable[i][j - 1];
+                }
+            }
+
+        }
+
+
+        //This is the part where we display the difference table
+
+
+        System.out.println("\nFinite Differences Table:");
+        for (int j = 0; j < n; j++) {
+            for (int i = 0; i < n - j; i++) {
+                System.out.printf("%.0f\t", diffTable[i][j]);
+            }
+            System.out.println();
+        }
+
+        input.close();
+    }
+}

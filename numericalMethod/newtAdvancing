@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+public class newtAdvancing {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        // Input: Number of data points
+        System.out.print("Enter number of data points: ");
+        int n = scanner.nextInt();
+
+        double[] x = new double[n];
+        double[][] diffTable = new double[n][n];
+
+        // Input: x values
+        System.out.println("Enter x values:");
+        for (int i = 0; i < n; i++) {
+            x[i] = scanner.nextDouble();
+        }
+
+        // Input: y values
+        System.out.println("Enter y values:");
+        for (int i = 0; i < n; i++) {
+            diffTable[i][0] = scanner.nextDouble();
+        }
+
+        // Compute forward difference table
+        for (int j = 1; j < n; j++) {
+            for (int i = 0; i < n - j; i++) {
+                diffTable[i][j] = diffTable[i + 1][j - 1] - diffTable[i][j - 1];
+            }
+        }
+
+        // Print forward difference table
+        System.out.println("\nForward Difference Table:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - i; j++) {
+                System.out.printf("%.2f\t", diffTable[i][j]);
+            }
+            System.out.println();
+        }
+
+        // Input: Interpolation point
+        System.out.print("\nEnter value of x to interpolate: ");
+        double xp = scanner.nextDouble();
+
+        // Compute Newton's Forward Difference Interpolation
+        double h = x[1] - x[0];  // Assuming uniform spacing
+        double p = (xp - x[0]) / h;
+        double yp = diffTable[0][0]; // Initial value
+
+        double term = 1;
+        for (int i = 1; i < n; i++) {
+            term *= (p - (i - 1)) / i;
+            yp += term * diffTable[0][i];
+        }
+
+        // Output interpolated value
+        System.out.printf("\nInterpolated value at x = %.2f is %.5f\n", xp, yp);
+
+        scanner.close();
+    }
+}
